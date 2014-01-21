@@ -1,3 +1,12 @@
 [submodule "cmake"]
 	path = cmake
 	url = git@github.com:mkleemann/cmake-avr.git
+[submodule "modules/timer"]
+	path = modules/timer
+	url = git@github.com:mkleemann/timer.git
+[submodule "modules/util"]
+	path = modules/util
+	url = git@github.com:mkleemann/util.git
+[submodule "modules/adc"]
+	path = modules/adc
+	url = git@github.com:mkleemann/adc.git
