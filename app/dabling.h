@@ -48,6 +48,12 @@
 #define SEG_H D,7
 
 /**
+ * \def SEG_PORT
+ * \brief port for segments of the 7 segment block
+ */
+#define SEG_PORT D
+
+/**
  * \def SEG_CAT1
  * \brief common cathode (select) for 1st 7 segment block
  * \def SEG_CAT2
@@ -78,16 +84,16 @@
  * \def SEG_NUM_9
  * \brief pattern for number 9
  */
-#define SEG_NUM_0 0b00111111
-#define SEG_NUM_1 0b00000110
-#define SEG_NUM_2 0b01011011
-#define SEG_NUM_3 0b01001111
-#define SEG_NUM_4 0b01100110
-#define SEG_NUM_5 0b01101101
-#define SEG_NUM_6 0b01111101
-#define SEG_NUM_7 0b00000111
-#define SEG_NUM_8 0b01111111
-#define SEG_NUM_9 0b01101111
+#define SEG_NUM_0 0x3F // 0b00111111
+#define SEG_NUM_1 0x06 // 0b00000110
+#define SEG_NUM_2 0x5B // 0b01011011
+#define SEG_NUM_3 0x4F // 0b01001111
+#define SEG_NUM_4 0x66 // 0b01100110
+#define SEG_NUM_5 0x6D // 0b01101101
+#define SEG_NUM_6 0x7D // 0b01111101
+#define SEG_NUM_7 0x07 // 0b00000111
+#define SEG_NUM_8 0x7F // 0b01111111
+#define SEG_NUM_9 0x6F // 0b01101111
 
 /**
  * \def SEG_DP
@@ -96,6 +102,9 @@
 #define SEG_DP    0b10000000
 
 
-
+/**
+ * \brief port initialization for leds
+ */
+void initPorts(void);
 
 #endif

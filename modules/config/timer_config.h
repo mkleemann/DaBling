@@ -45,7 +45,7 @@
 #ifdef __DOXYGEN__
    #define TIMER0_PRESCALER      (1 << CS02) | (1 << CS00)
 #else
-//#define TIMER0_PRESCALER      (1 << CS02) | (1 << CS00)
+   #define TIMER0_PRESCALER      (1 << CS02) | (1 << CS00)
 #endif
 
 /**
@@ -66,10 +66,14 @@
  *
  * TIMER1 with prescaler clkI/O/1024
  */
-#define TIMER1_PRESCALER      (1 << CS12) | (1 << CS10)
+#ifdef __DOXYGEN__
+   #define TIMER1_PRESCALER      (1 << CS12) | (1 << CS10)
+#else
+//   #define TIMER1_PRESCALER      (1 << CS12) | (1 << CS10)
+#endif
 
 /**
- * @brief Timer 1 Output Compare Value
+ * \brief Timer 1 Output Compare Value
  *
  * The value given calculates to approx. 15s (4MHz@1024 prescale value).
  */
@@ -93,10 +97,14 @@
  *
  * TIMER2 with prescaler clkI/O/1024
  */
-#define TIMER2_PRESCALER      (1 << CS22) | (1 << CS21) | (1 << CS20)
+#ifdef __DOXYGEN__
+   #define TIMER2_PRESCALER      (1 << CS22) | (1 << CS21) | (1 << CS20)
+#else
+//   #define TIMER2_PRESCALER      (1 << CS22) | (1 << CS21) | (1 << CS20)
+#endif
 
 /**
- * @brief Timer 2 Output Compare Value
+ * \brief Timer 2 Output Compare Value
  *
  * The value given calculates to approx. 25ms (4MHz@1024 prescale factor).
  *
