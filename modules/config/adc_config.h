@@ -82,7 +82,7 @@
  *     1     1     1 128
  * \endcode
  */
-#define ADC_PRESCALER         (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0)
+#define ADC_PRESCALER         (1 << ADPS2)
 
 /**
  * @brief use only upper 8bit of ADC value

@@ -38,14 +38,24 @@ uint8_t pattern[NUM_OF_PATTERN] = { SEG_NUM_0,
                                     SEG_NUM_8,
                                     SEG_NUM_9 };
 
+union {
+   uint8_t  val8bit[2];
+   uint16_t val16bit;
+} adcValue;
+
+
 // === MAIN LOOP =============================================================
 
 /**
  * \brief main loop
  **/
+#ifdef __DOXYGEN__
+int main(void)
+#else
 int __attribute__((OS_main)) main(void)
+#endif
 {
-   int i = 0;
+   uint8_t  i = 0;
 
    initPorts();
 
@@ -54,8 +64,12 @@ int __attribute__((OS_main)) main(void)
 
    adc_init();
 
+   // enable all (configured) interrupts
+   sei();
+
    while(1)
    {
+      // count to 10 - two times
       SET_PIN(SEG_CAT1);
       for(i = 0; i < NUM_OF_PATTERN; ++i)
       {
@@ -74,6 +88,21 @@ int __attribute__((OS_main)) main(void)
       RESET_PIN(SEG_CAT2);
       _delay_ms(100);
 
+      // random adc pattern
+      for(i = 0; i < 1000; ++i)
+      {
+         SET_PIN(SEG_CAT1);
+         EXP_PORT(SEG_PORT) = adcValue.val8bit[0] ^ adcValue.val8bit[1];
+         _delay_ms(10);
+         RESET_PIN(SEG_CAT1);
+         _delay_ms(1);
+
+         SET_PIN(SEG_CAT2);
+         EXP_PORT(SEG_PORT) = adcValue.val8bit[1];
+         _delay_ms(10);
+         RESET_PIN(SEG_CAT2);
+         _delay_ms(1);
+      }
    }
 }
 
@@ -84,6 +113,7 @@ int __attribute__((OS_main)) main(void)
  */
 ISR(TIMER0_OVF_vect)
 {
+   adcValue.val16bit = adc_get();
 }
 
 // === HELPERS ===============================================================
