@@ -10,3 +10,6 @@
 [submodule "modules/adc"]
 	path = modules/adc
 	url = git@github.com:mkleemann/adc.git
+[submodule "modules/leds"]
+	path = modules/leds
+	url = git@github.com:mkleemann/leds.git
