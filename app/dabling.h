@@ -39,7 +39,7 @@
  * | * * * * * * * * * |
  * +-------------------+
  *
- * As see from the top:
+ * As seen from the top (flipped over):
  * /-------------------+
  * | *  --    *  --    |  H   D
  * |   |  |     |  |   |    C   E
@@ -95,6 +95,12 @@
  */
 #define SEG_CAT1 B,6
 #define SEG_CAT2 B,7
+
+/**
+ * \def BLUE_PIN
+ * \brief port pin of the blue LED
+ */
+#define BLUE_PIN  B,1
 
 /**
  * \def SEG_NUM_0
@@ -163,8 +169,8 @@ void initHardware(void);
 
 /**
  * \brief show values on left and right 7 segment display
- * \param left  byte
- * \param right byte
+ * \param left  byte and left display side
+ * \param right byte and right display side
  */
 void show7Segment(uint8_t left, uint8_t right);
 

@@ -46,12 +46,8 @@ uint8_t pattern[NUM_OF_PATTERN] = { SEG_NUM_0,
                                     SEG_NUM_E,
                                     SEG_NUM_F };
 
-//! union to save random adc pattern and easier access
-union {
-   uint8_t  val8bit[2];
-   uint16_t val16bit;
-} adcValue;
-
+//! value of the adc pin
+uint16_t adcVal = 0xAFFE;
 
 // === MAIN LOOP =============================================================
 
@@ -64,44 +60,39 @@ int main(void)
 int __attribute__((OS_main)) main(void)
 #endif
 {
-   uint8_t  i = 0;
-
-   adcValue.val16bit = 0xAFFE;
+   uint16_t i = 0;
+   uint16_t j = 0;
 
    initHardware();
 
    while(1)
    {
       // count to 10 - two times
-      SET_PIN(SEG_CAT1);
       for(i = 0; i < NUM_OF_PATTERN; ++i)
       {
-         EXP_PORT(SEG_PORT) = pattern[i];
-         _delay_ms(500);
+         // j * wait time in show7Segment() = time to display pattern
+         for(j = 0; j < 23; ++j)
+         {
+            show7Segment(pattern[i], ~(pattern[i]));
+         }
       }
-      RESET_PIN(SEG_CAT1);
       _delay_ms(10);
 
-      SET_PIN(SEG_CAT2);
       for(i = 0; i < NUM_OF_PATTERN; ++i)
       {
-         EXP_PORT(SEG_PORT) = pattern[i];
-         _delay_ms(500);
+         // j * wait time in show7Segment() = time to display pattern
+         for(j = 0; j < 23; ++j)
+         {
+            show7Segment(~(pattern[i]), pattern[i]);
+         }
       }
-      RESET_PIN(SEG_CAT2);
       _delay_ms(10);
 
       // random adc pattern
-      for(i = 0; i < 1000; ++i)
+      for(i = 0; i < 1500; ++i)
       {
-         show7Segment(adcValue.val8bit[0] ^ adcValue.val8bit[1], adcValue.val8bit[1]);
-      }
-
-      // show adc value on 7 segment display
-      for(i = 0; i < 1000; ++i)
-      {
-         show7Segment(pattern[adcValue.val8bit[0]],
-                      pattern[adcValue.val8bit[1]]);
+         show7Segment(adcVal & 0xFF,
+                      adcVal >> 8);
       }
    }
 }
@@ -115,7 +106,8 @@ int __attribute__((OS_main)) main(void)
  */
 ISR(TIMER0_OVF_vect)
 {
-   adcValue.val16bit = adc_get();
+   adcVal = adc_get();
+   TOGGLE_PIN(BLUE_PIN);
 }
 
 // === HELPERS ===============================================================
@@ -138,6 +130,10 @@ void initHardware(void)
    EXP_DDR(SEG_PORT) = 0xFF;
    EXP_PORT(SEG_PORT) = 0;
 
+   // init port pin of blue LED
+   PIN_SET_OUTPUT(BLUE_PIN);
+   RESET_PIN(BLUE_PIN);
+
    // approx. 262ms @ 1MHz
    initTimer0(/* TimerOverflow */);
    adc_init();
@@ -151,20 +147,20 @@ void initHardware(void)
 
 /**
  * \brief show values on left and right 7 segment display
- * \param left  byte
- * \param right byte
+ * \param left  byte and left display side
+ * \param right byte and right display side
  */
 void show7Segment(uint8_t left, uint8_t right)
 {
    SET_PIN(SEG_CAT1);
-   EXP_PORT(SEG_PORT) = left;
-   _delay_ms(20);
+   EXP_PORT(SEG_PORT) = right;
+   _delay_ms(10);
     RESET_PIN(SEG_CAT1);
    _delay_ms(1);
 
    SET_PIN(SEG_CAT2);
-   EXP_PORT(SEG_PORT) = right;
-   _delay_ms(20);
+   EXP_PORT(SEG_PORT) = left;
+   _delay_ms(10);
    RESET_PIN(SEG_CAT2);
    _delay_ms(1);
 }
