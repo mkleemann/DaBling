@@ -25,8 +25,10 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
+//! number of pattern in the pattern array
 #define NUM_OF_PATTERN 10
 
+//! pattern array for the 7 segment display
 uint8_t pattern[NUM_OF_PATTERN] = { SEG_NUM_0,
                                     SEG_NUM_1,
                                     SEG_NUM_2,
@@ -38,6 +40,7 @@ uint8_t pattern[NUM_OF_PATTERN] = { SEG_NUM_0,
                                     SEG_NUM_8,
                                     SEG_NUM_9 };
 
+//! union to save random adc pattern and easier access
 union {
    uint8_t  val8bit[2];
    uint16_t val16bit;
@@ -114,6 +117,8 @@ int __attribute__((OS_main)) main(void)
 
 /**
  * \brief timer 0 overflow interrupt service routine
+ * Every overflow, the adc value of the unconnected port pin is read
+ * to get a random value.
  */
 ISR(TIMER0_OVF_vect)
 {
@@ -124,6 +129,7 @@ ISR(TIMER0_OVF_vect)
 
 /**
  * \brief port initialization for leds
+ * The port and pins for the 7 segment displays are setup.
  */
 void initPorts(void)
 {

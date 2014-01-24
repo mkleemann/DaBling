@@ -15,6 +15,40 @@
  *
  * \date Created: 22.01.2014 22:30:45
  * \author Matthias Kleemann
+ *
+ * ----------------------------------------------------------------------------
+ * \section dabling_vqe23 VQE23 Pinout
+ * For showing patterns on a dual 7 segment display, an old GDR made VQE23
+ * (green, common cathode) was used. The pinout can be seen below and how
+ * they match to the LEDs themselves.
+ *
+ * The display was connected with 330 Ohm resistors to the atmega port pins
+ * and each block is selected by their cathode, connected via an npn transistor
+ * and 1k resistor between base and select pin of the atmega, to ground.
+ *
+ * \code
+ * As seen from below (pin side up):
+ *
+ * +-------------------\
+ * | * * * * * * * * * |
+ * | C E D K K D E C H |
+ * | 1 1 1 1 2 2 2 2 2 |
+ * |                   |
+ * | H G A F B B F A G |
+ * | 1 1 1 1 1 2 2 2 2 |
+ * | * * * * * * * * * |
+ * +-------------------+
+ *
+ * As see from the top:
+ * /-------------------+
+ * | *  --    *  --    |  H   D
+ * |   |  |     |  |   |    C   E
+ * |    --       --    |      G
+ * |   |  |     |  |   |    B   F
+ * |    --  *    --  * |      A
+ * +-------------------+
+ * \endcode
+ *
  **/
 
 #ifndef __DABLING_H__
@@ -99,11 +133,12 @@
  * \def SEG_DP
  * \brief digital point of 7 segment block
  */
-#define SEG_DP    0b10000000
+#define SEG_DP    0x80 // 0b10000000
 
 
 /**
  * \brief port initialization for leds
+ * The port and pins for the 7 segment displays are setup.
  */
 void initPorts(void);
 
