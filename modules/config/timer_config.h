@@ -100,7 +100,7 @@
 #ifdef __DOXYGEN__
    #define TIMER2_PRESCALER      (1 << CS22) | (1 << CS21) | (1 << CS20)
 #else
-//   #define TIMER2_PRESCALER      (1 << CS22) | (1 << CS21) | (1 << CS20)
+   #define TIMER2_PRESCALER      (1 << CS22) | (1 << CS21) | (1 << CS20)
 #endif
 
 /**
@@ -110,7 +110,7 @@
  *
  * Default value should be set to MAX (0xFF)
  */
-#define TIMER2_COMPARE_VALUE  99
+#define TIMER2_COMPARE_VALUE  50
 
 #endif
 

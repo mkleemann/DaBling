@@ -49,6 +49,9 @@ uint8_t pattern[NUM_OF_PATTERN] = { SEG_NUM_0,
 //! value of the adc pin
 uint16_t adcVal = 0xAFFE;
 
+//! trigger value of flasher
+uint8_t flashTrigger = 1;
+
 // === MAIN LOOP =============================================================
 
 /**
@@ -100,14 +103,35 @@ int __attribute__((OS_main)) main(void)
 // === ISR ===================================================================
 
 /**
- * \brief timer 0 overflow interrupt service routine
+ * \brief timer0 overflow interrupt service routine
  * Every overflow, the adc value of the unconnected port pin is read
  * to get a random value.
  */
 ISR(TIMER0_OVF_vect)
 {
    adcVal = adc_get();
-   TOGGLE_PIN(BLUE_PIN);
+}
+
+/**
+ * \brief timer2 compare interrupt service routine
+ */
+ISR(TIMER2_COMP_vect)
+{
+   flashTrigger <<= 1;
+   // only flash if pattern is met
+   if(flashTrigger & 0x15)
+   {
+      SET_PIN(BLUE_PIN);
+   }
+   else
+   {
+      RESET_PIN(BLUE_PIN);
+   }
+   // reset trigger
+   if(flashTrigger & 0x80)
+   {
+      flashTrigger = 1;
+   }
 }
 
 // === HELPERS ===============================================================
@@ -136,6 +160,7 @@ void initHardware(void)
 
    // approx. 262ms @ 1MHz
    initTimer0(/* TimerOverflow */);
+   initTimer2(TimerCompare);
    adc_init();
 
    // enable all (configured) interrupts
@@ -143,6 +168,7 @@ void initHardware(void)
 
    adc_enable();
    startTimer0();
+   startTimer2();
 }
 
 /**
