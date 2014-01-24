@@ -93,8 +93,8 @@
  * \def SEG_CAT2
  * \brief common cathode (select) for 2nd 7 segment block
  */
-#define SEG_CAT1 B,7
-#define SEG_CAT2 B,6
+#define SEG_CAT1 B,6
+#define SEG_CAT2 B,7
 
 /**
  * \def SEG_NUM_0
@@ -117,6 +117,18 @@
  * \brief pattern for number 8
  * \def SEG_NUM_9
  * \brief pattern for number 9
+ * \def SEG_NUM_A
+ * \brief pattern for character A
+ * \def SEG_NUM_B
+ * \brief pattern for character B
+ * \def SEG_NUM_C
+ * \brief pattern for character C
+ * \def SEG_NUM_D
+ * \brief pattern for character D
+ * \def SEG_NUM_E
+ * \brief pattern for character E
+ * \def SEG_NUM_F
+ * \brief pattern for character F
  */
 #define SEG_NUM_0 0x3F // 0b00111111
 #define SEG_NUM_1 0x06 // 0b00000110
@@ -128,6 +140,12 @@
 #define SEG_NUM_7 0x07 // 0b00000111
 #define SEG_NUM_8 0x7F // 0b01111111
 #define SEG_NUM_9 0x6F // 0b01101111
+#define SEG_NUM_A 0x77 // 0b01110111
+#define SEG_NUM_B 0x4F // 0b01001111
+#define SEG_NUM_C 0x39 // 0b00111001
+#define SEG_NUM_D 0x0F // 0b00001111
+#define SEG_NUM_E 0x79 // 0b01111001
+#define SEG_NUM_F 0x71 // 0b01110001
 
 /**
  * \def SEG_DP
@@ -137,9 +155,17 @@
 
 
 /**
- * \brief port initialization for leds
- * The port and pins for the 7 segment displays are setup.
+ * \brief initialization for hardware
+ * The port and pins for the 7 segment displays are setup as
+ * well as timer(s) and adc.
  */
-void initPorts(void);
+void initHardware(void);
+
+/**
+ * \brief show values on left and right 7 segment display
+ * \param left  byte
+ * \param right byte
+ */
+void show7Segment(uint8_t left, uint8_t right);
 
 #endif
