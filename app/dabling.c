@@ -57,6 +57,8 @@ int __attribute__((OS_main)) main(void)
 {
    uint8_t  i = 0;
 
+   adcValue.val16bit = 0xAFFE;
+
    initPorts();
 
    // approx. 262ms @ 1MHz
@@ -66,6 +68,8 @@ int __attribute__((OS_main)) main(void)
 
    // enable all (configured) interrupts
    sei();
+
+   startTimer0();
 
    while(1)
    {
