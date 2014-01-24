@@ -21,6 +21,7 @@ target_link_libraries(
    dabling-${AVR_MCU}.elf
    adc-${AVR_MCU}
    timer-${AVR_MCU}
+   leds-${AVR_MCU}
    #   module_config-${AVR_MCU}
    ${C_LIB}
 )

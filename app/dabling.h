@@ -97,12 +97,6 @@
 #define SEG_CAT2 B,7
 
 /**
- * \def BLUE_PIN
- * \brief port pin of the blue LED
- */
-#define BLUE_PIN  B,1
-
-/**
  * \def SEG_NUM_0
  * \brief pattern for number 0
  * \def SEG_NUM_1
@@ -174,4 +168,12 @@ void initHardware(void);
  */
 void show7Segment(uint8_t left, uint8_t right);
 
+/**
+ * \brief routine to flash leds using a trigger pattern
+ * \param led definition in leds_config.h
+ * \param trigger pattern
+ */
+void flashLed(eLED led, uint8_t trigger);
+
 #endif
+

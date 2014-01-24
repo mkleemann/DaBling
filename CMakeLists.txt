@@ -112,6 +112,7 @@ include_directories(modules)
 add_subdirectory(modules/adc)
 #add_subdirectory(modules/config)
 add_subdirectory(modules/timer)
+add_subdirectory(modules/leds)
 
 ##################################################################################
 # down to the application itself

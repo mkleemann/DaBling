@@ -19,6 +19,7 @@
 
 #include "util/util.h"
 #include "adc/adc.h"
+#include "leds/leds.h"
 #include "timer/timer.h"
 #include "dabling.h"
 
@@ -118,15 +119,9 @@ ISR(TIMER0_OVF_vect)
 ISR(TIMER2_COMP_vect)
 {
    flashTrigger <<= 1;
-   // only flash if pattern is met
-   if(flashTrigger & 0x15)
-   {
-      SET_PIN(BLUE_PIN);
-   }
-   else
-   {
-      RESET_PIN(BLUE_PIN);
-   }
+
+   flashLed(flashBlue1, 0x15);
+   flashLed(flashBlue2, 0xEA);
    // reset trigger
    if(flashTrigger & 0x80)
    {
@@ -154,14 +149,13 @@ void initHardware(void)
    EXP_DDR(SEG_PORT) = 0xFF;
    EXP_PORT(SEG_PORT) = 0;
 
-   // init port pin of blue LED
-   PIN_SET_OUTPUT(BLUE_PIN);
-   RESET_PIN(BLUE_PIN);
-
    // approx. 262ms @ 1MHz
    initTimer0(/* TimerOverflow */);
+   // approx. 50ms @ 1MHz
    initTimer2(TimerCompare);
+
    adc_init();
+   led_init();
 
    // enable all (configured) interrupts
    sei();
@@ -190,3 +184,22 @@ void show7Segment(uint8_t left, uint8_t right)
    RESET_PIN(SEG_CAT2);
    _delay_ms(1);
 }
+
+/**
+ * \brief routine to flash leds using a trigger pattern
+ * \param led definition in leds_config.h
+ * \param trigger pattern
+ */
+void flashLed(eLED led, uint8_t trigger)
+{
+   // only flash if pattern is met
+   if(flashTrigger & trigger)
+   {
+      led_on(led);
+   }
+   else
+   {
+      led_off(led);
+   }
+}
+
