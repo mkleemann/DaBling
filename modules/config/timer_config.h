@@ -110,7 +110,7 @@
  *
  * Default value should be set to MAX (0xFF)
  */
-#define TIMER2_COMPARE_VALUE  50
+#define TIMER2_COMPARE_VALUE  25
 
 #endif
 

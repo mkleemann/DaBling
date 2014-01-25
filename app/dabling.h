@@ -173,7 +173,7 @@ void show7Segment(uint8_t left, uint8_t right);
  * \param led definition in leds_config.h
  * \param trigger pattern
  */
-void flashLed(eLED led, uint8_t trigger);
+void flashLed(eLED led, uint16_t trigger);
 
 #endif
 

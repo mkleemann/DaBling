@@ -51,7 +51,7 @@ uint8_t pattern[NUM_OF_PATTERN] = { SEG_NUM_0,
 uint16_t adcVal = 0xAFFE;
 
 //! trigger value of flasher
-uint8_t flashTrigger = 1;
+uint16_t flashTrigger = 1;
 
 // === MAIN LOOP =============================================================
 
@@ -120,10 +120,10 @@ ISR(TIMER2_COMP_vect)
 {
    flashTrigger <<= 1;
 
-   flashLed(flashBlue1, 0x15);
-   flashLed(flashBlue2, 0xEA);
+   flashLed(flashBlue1, 0x0333);
+   flashLed(flashBlue2, 0x0249);
    // reset trigger
-   if(flashTrigger & 0x80)
+   if(flashTrigger & 0x8000)
    {
       flashTrigger = 1;
    }
@@ -190,7 +190,7 @@ void show7Segment(uint8_t left, uint8_t right)
  * \param led definition in leds_config.h
  * \param trigger pattern
  */
-void flashLed(eLED led, uint8_t trigger)
+void flashLed(eLED led, uint16_t trigger)
 {
    // only flash if pattern is met
    if(flashTrigger & trigger)
