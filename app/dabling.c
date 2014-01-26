@@ -47,6 +47,12 @@ uint8_t pattern[NUM_OF_PATTERN] = { SEG_NUM_0,
                                     SEG_NUM_E,
                                     SEG_NUM_F };
 
+//! matrix: count rows
+portaccess_t rows[MATRIX_MAX_ROW] = { P_ROWS };
+
+//! matrix: count columns
+portaccess_t cols[MATRIX_MAX_COLUMN] = { P_COLS };
+
 //! value of the adc pin
 uint16_t adcVal = 0xAFFE;
 
@@ -93,10 +99,23 @@ int __attribute__((OS_main)) main(void)
       _delay_ms(10);
 
       // random adc pattern
-      for(i = 0; i < 1500; ++i)
+      for(i = 0; i < 2500; ++i)
       {
          show7Segment(adcVal & 0xFF,
                       adcVal >> 8);
+      }
+
+      // simple pattern for matrix
+      for(i = 0; i < MATRIX_MAX_ROW; ++i)
+      {
+         *(rows[i].port) |= (1 << rows[i].pin);
+         for(j = 0; j < MATRIX_MAX_COLUMN; ++j)
+         {
+            *(cols[j].port) |= (1 << cols[j].pin);
+            _delay_ms(250);
+            *(cols[j].port) &= ~(1 << cols[j].pin);
+         }
+         *(rows[i].port) &= ~(1 << rows[i].pin);
       }
    }
 }
@@ -138,12 +157,26 @@ ISR(TIMER2_COMP_vect)
  */
 void initHardware(void)
 {
+   int i = 0;
+
    // block select (common cathode of 7 segment blocks)
    PIN_SET_OUTPUT(SEG_CAT1);
    RESET_PIN(SEG_CAT1);
 
    PIN_SET_OUTPUT(SEG_CAT2);
    RESET_PIN(SEG_CAT2);
+
+   // set 3x3 LED matrix rows and columns as output
+   for(i = 0; i < MATRIX_MAX_ROW; ++i)
+   {
+      *(rows[i].ddr) |= (1 << rows[i].pin);
+      *(rows[i].port) &= ~(1 << rows[i].pin);
+   }
+   for(i = 0; i < MATRIX_MAX_COLUMN; ++i)
+   {
+      *(cols[i].ddr) |= (1 << cols[i].pin);
+      *(cols[i].port) &= ~(1 << cols[i].pin);
+   }
 
    // init port for segments (all outputs) and set to 0
    EXP_DDR(SEG_PORT) = 0xFF;

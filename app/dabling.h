@@ -153,6 +153,26 @@
  */
 #define SEG_DP    0x80 // 0b10000000
 
+/**
+ * \def P_ROWS
+ * \brief pointer to row pins of the 3x3 LED matrix
+ */
+#define P_ROWS       \
+   SET_PORT_PTR(C,1),\
+   SET_PORT_PTR(C,2),\
+   SET_PORT_PTR(C,3)
+
+/**
+ * \def P_COLS
+ * \brief pointer to column pins of the 3x3 LED matrix
+ */
+#define P_COLS       \
+   SET_PORT_PTR(B,3),\
+   SET_PORT_PTR(B,4),\
+   SET_PORT_PTR(B,5)
+
+#define MATRIX_MAX_ROW    3
+#define MATRIX_MAX_COLUMN 3
 
 /**
  * \brief initialization for hardware
