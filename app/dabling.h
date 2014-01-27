@@ -153,23 +153,14 @@
  */
 #define SEG_DP    0x80 // 0b10000000
 
-/**
- * \def P_ROWS
- * \brief pointer to row pins of the 3x3 LED matrix
- */
-#define P_ROWS       \
-   SET_PORT_PTR(C,1),\
-   SET_PORT_PTR(C,2),\
-   SET_PORT_PTR(C,3)
+#define MATRIX_ROW_PORT C
+#define MATRIX_COL_PORT B
 
-/**
- * \def P_COLS
- * \brief pointer to column pins of the 3x3 LED matrix
- */
-#define P_COLS       \
-   SET_PORT_PTR(B,3),\
-   SET_PORT_PTR(B,4),\
-   SET_PORT_PTR(B,5)
+#define MATRIX_ROW_MASK ((1 << PINB5) | (1 << PINB4) | (1 << PINB3))
+#define MATRIX_COL_MASK ((1 << PINC3) | (1 << PINC2) | (1 << PINC1))
+
+#define MATRIX_ROW_SHIFT 3
+#define MATRIX_COL_SHIFT 0
 
 #define MATRIX_MAX_ROW    3
 #define MATRIX_MAX_COLUMN 3
@@ -194,6 +185,19 @@ void show7Segment(uint8_t left, uint8_t right);
  * \param trigger pattern
  */
 void flashLed(eLED led, uint16_t trigger);
+
+/**
+ * \brief show pattern in 3x3 matrix
+ * The pattern is defined by the rows and columns selected.
+ * \param rows to be selected
+ * \param columns to be selected
+ */
+void showMatrix(uint8_t rows, uint8_t columns);
+
+/**
+ * \brief switch 3x3 matrix off
+ */
+void hideMatrix(void);
 
 #endif
 

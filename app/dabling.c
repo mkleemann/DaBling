@@ -47,12 +47,6 @@ uint8_t pattern[NUM_OF_PATTERN] = { SEG_NUM_0,
                                     SEG_NUM_E,
                                     SEG_NUM_F };
 
-//! matrix: count rows
-portaccess_t rows[MATRIX_MAX_ROW] = { P_ROWS };
-
-//! matrix: count columns
-portaccess_t cols[MATRIX_MAX_COLUMN] = { P_COLS };
-
 //! value of the adc pin
 uint16_t adcVal = 0xAFFE;
 
@@ -72,6 +66,8 @@ int __attribute__((OS_main)) main(void)
 {
    uint16_t i = 0;
    uint16_t j = 0;
+   uint8_t row = 1;
+   uint8_t col = 1;
 
    initHardware();
 
@@ -108,15 +104,18 @@ int __attribute__((OS_main)) main(void)
       // simple pattern for matrix
       for(i = 0; i < MATRIX_MAX_ROW; ++i)
       {
-         *(rows[i].port) |= (1 << rows[i].pin);
          for(j = 0; j < MATRIX_MAX_COLUMN; ++j)
          {
-            *(cols[j].port) |= (1 << cols[j].pin);
-            _delay_ms(250);
-            *(cols[j].port) &= ~(1 << cols[j].pin);
+            showMatrix(row, col);
+            _delay_ms(200);
+            hideMatrix();
+            _delay_ms(1);
+            col <<= 1;
          }
-         *(rows[i].port) &= ~(1 << rows[i].pin);
+         row <<= 1;
       }
+      row = 1;
+      col = 1;
    }
 }
 
@@ -157,8 +156,6 @@ ISR(TIMER2_COMP_vect)
  */
 void initHardware(void)
 {
-   int i = 0;
-
    // block select (common cathode of 7 segment blocks)
    PIN_SET_OUTPUT(SEG_CAT1);
    RESET_PIN(SEG_CAT1);
@@ -167,16 +164,10 @@ void initHardware(void)
    RESET_PIN(SEG_CAT2);
 
    // set 3x3 LED matrix rows and columns as output
-   for(i = 0; i < MATRIX_MAX_ROW; ++i)
-   {
-      *(rows[i].ddr) |= (1 << rows[i].pin);
-      *(rows[i].port) &= ~(1 << rows[i].pin);
-   }
-   for(i = 0; i < MATRIX_MAX_COLUMN; ++i)
-   {
-      *(cols[i].ddr) |= (1 << cols[i].pin);
-      *(cols[i].port) &= ~(1 << cols[i].pin);
-   }
+   EXP_DDR(MATRIX_ROW_PORT) |= MATRIX_ROW_MASK;
+   EXP_PORT(MATRIX_ROW_PORT) &= ~MATRIX_ROW_MASK;
+   EXP_DDR(MATRIX_COL_PORT) |= MATRIX_COL_MASK;
+   EXP_PORT(MATRIX_COL_PORT) &= ~MATRIX_COL_MASK;
 
    // init port for segments (all outputs) and set to 0
    EXP_DDR(SEG_PORT) = 0xFF;
@@ -184,7 +175,7 @@ void initHardware(void)
 
    // approx. 262ms @ 1MHz
    initTimer0(/* TimerOverflow */);
-   // approx. 50ms @ 1MHz
+   // approx. 25ms @ 1MHz
    initTimer2(TimerCompare);
 
    adc_init();
@@ -234,5 +225,26 @@ void flashLed(eLED led, uint16_t trigger)
    {
       led_off(led);
    }
+}
+
+/**
+ * \brief show pattern in 3x3 matrix
+ * The pattern is defined by the rows and columns selected.
+ * \param rows to be selected
+ * \param columns to be selected
+ */
+void showMatrix(uint8_t rows, uint8_t columns)
+{
+   EXP_PORT(MATRIX_ROW_PORT) |= (rows << MATRIX_ROW_SHIFT);
+   EXP_PORT(MATRIX_COL_PORT) |= (columns << MATRIX_COL_SHIFT);
+}
+
+/**
+ * \brief switch 3x3 matrix off
+ */
+void hideMatrix(void)
+{
+   EXP_PORT(MATRIX_ROW_PORT) &= ~MATRIX_ROW_MASK;
+   EXP_PORT(MATRIX_COL_PORT) &= ~MATRIX_COL_MASK;
 }
 
