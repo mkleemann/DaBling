@@ -66,8 +66,6 @@ int __attribute__((OS_main)) main(void)
 {
    uint16_t i = 0;
    uint16_t j = 0;
-   uint8_t row = 1;
-   uint8_t col = 1;
 
    initHardware();
 
@@ -106,16 +104,12 @@ int __attribute__((OS_main)) main(void)
       {
          for(j = 0; j < MATRIX_MAX_COLUMN; ++j)
          {
-            showMatrix(row, col);
+            showMatrix((1 << i), (1 << j));
             _delay_ms(200);
             hideMatrix();
             _delay_ms(1);
-            col <<= 1;
          }
-         row <<= 1;
       }
-      row = 1;
-      col = 1;
    }
 }
 
@@ -162,6 +156,11 @@ void initHardware(void)
 
    PIN_SET_OUTPUT(SEG_CAT2);
    RESET_PIN(SEG_CAT2);
+
+//   DDRC |= (1 << PINC1);
+//   DDRB |= (1 << PINB3);
+//   PORTC |= (1 << PINC1);
+//   PORTB |= (1 << PINB3);
 
    // set 3x3 LED matrix rows and columns as output
    EXP_DDR(MATRIX_ROW_PORT) |= MATRIX_ROW_MASK;

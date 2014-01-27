@@ -153,14 +153,14 @@
  */
 #define SEG_DP    0x80 // 0b10000000
 
-#define MATRIX_ROW_PORT C
-#define MATRIX_COL_PORT B
+#define MATRIX_ROW_PORT B
+#define MATRIX_COL_PORT C
 
 #define MATRIX_ROW_MASK ((1 << PINB5) | (1 << PINB4) | (1 << PINB3))
 #define MATRIX_COL_MASK ((1 << PINC3) | (1 << PINC2) | (1 << PINC1))
 
 #define MATRIX_ROW_SHIFT 3
-#define MATRIX_COL_SHIFT 0
+#define MATRIX_COL_SHIFT 1
 
 #define MATRIX_MAX_ROW    3
 #define MATRIX_MAX_COLUMN 3
