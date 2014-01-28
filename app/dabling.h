@@ -199,5 +199,10 @@ void showMatrix(uint8_t rows, uint8_t columns);
  */
 void hideMatrix(void);
 
+/**
+ * \brief show the pattern defined multiplexing the rows
+ */
+void showMatrixPattern(void);
+
 #endif
 

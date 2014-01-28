@@ -69,15 +69,15 @@
 #ifdef __DOXYGEN__
    #define TIMER1_PRESCALER      (1 << CS12) | (1 << CS10)
 #else
-//   #define TIMER1_PRESCALER      (1 << CS12) | (1 << CS10)
+   #define TIMER1_PRESCALER      (1 << CS12) | (1 << CS10)
 #endif
 
 /**
  * \brief Timer 1 Output Compare Value
  *
- * The value given calculates to approx. 15s (4MHz@1024 prescale value).
+ * The value given calculates to approx. 10ms (1MHz@1024 prescale value).
  */
-#define TIMER1_COMPARE_VALUE  0xE4E1
+#define TIMER1_COMPARE_VALUE  10
 
 /**
  * \def TIMER2_PRESCALER

@@ -53,6 +53,29 @@ uint16_t adcVal = 0xAFFE;
 //! trigger value of flasher
 uint16_t flashTrigger = 1;
 
+//! trigger matrix pattern
+uint8_t matrixPatternTrigger = 0;
+
+//! trigger matrix row to be shown
+uint8_t matrixRowTrigger = 0;
+
+//! pattern type for matrix
+typedef struct { //! row pattern
+                 uint8_t rows;
+                 //! column patter
+                 uint8_t cols;
+               } matrix_t;
+
+//! max. number of matrix pattern
+#define NUM_OF_MATRIX_PATTERN 4
+
+//! simple pattern for matrix
+matrix_t matrixPattern[NUM_OF_MATRIX_PATTERN][MATRIX_MAX_ROW] =
+   { { { 7, 2 }, { 7, 2 }, { 7, 2 } },    // ***,o*o ***,o*o ***,o*o
+     { { 1, 1 }, { 2, 2 }, { 4, 4 } },    // oo*,oo* o*o,o*o *oo,*oo
+     { { 2, 7 }, { 2, 7 }, { 2, 7 } },    // o*o,*** o*o,*** o*o,***
+     { { 1, 4 }, { 2, 2 }, { 4, 1 } } };  // oo*,*oo o*o,o*o *oo,oo*
+
 // === MAIN LOOP =============================================================
 
 /**
@@ -126,6 +149,15 @@ ISR(TIMER0_OVF_vect)
 }
 
 /**
+ * \brief timer1 compare interrupt service routine
+ */
+ISR(TIMER1_CAPT_vect)
+{
+   ++matrixRowTrigger;
+   showMatrixPattern();
+}
+
+/**
  * \brief timer2 compare interrupt service routine
  */
 ISR(TIMER2_COMP_vect)
@@ -157,10 +189,9 @@ void initHardware(void)
    PIN_SET_OUTPUT(SEG_CAT2);
    RESET_PIN(SEG_CAT2);
 
-//   DDRC |= (1 << PINC1);
-//   DDRB |= (1 << PINB3);
-//   PORTC |= (1 << PINC1);
-//   PORTB |= (1 << PINB3);
+   // init port for segments (all outputs) and set to 0
+   EXP_DDR(SEG_PORT) = 0xFF;
+   EXP_PORT(SEG_PORT) = 0;
 
    // set 3x3 LED matrix rows and columns as output
    EXP_DDR(MATRIX_ROW_PORT) |= MATRIX_ROW_MASK;
@@ -168,12 +199,10 @@ void initHardware(void)
    EXP_DDR(MATRIX_COL_PORT) |= MATRIX_COL_MASK;
    EXP_PORT(MATRIX_COL_PORT) &= ~MATRIX_COL_MASK;
 
-   // init port for segments (all outputs) and set to 0
-   EXP_DDR(SEG_PORT) = 0xFF;
-   EXP_PORT(SEG_PORT) = 0;
-
    // approx. 262ms @ 1MHz
    initTimer0(/* TimerOverflow */);
+   // approx. 10ms @ 1MHz
+   initTimer1(TimerCompare);
    // approx. 25ms @ 1MHz
    initTimer2(TimerCompare);
 
@@ -185,6 +214,7 @@ void initHardware(void)
 
    adc_enable();
    startTimer0();
+   startTimer1();
    startTimer2();
 }
 
@@ -247,3 +277,11 @@ void hideMatrix(void)
    EXP_PORT(MATRIX_COL_PORT) &= ~MATRIX_COL_MASK;
 }
 
+/**
+ * \brief show the pattern defined multiplexing the rows
+ */
+void showMatrixPattern(void)
+{
+   showMatrix(matrixPattern[matrixPatternTrigger][matrixRowTrigger].rows,
+              matrixPattern[matrixPatternTrigger][matrixRowTrigger].cols);
+}
