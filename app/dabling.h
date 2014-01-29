@@ -153,15 +153,39 @@
  */
 #define SEG_DP    0x80 // 0b10000000
 
+/**
+ * \def MATRIX_ROW_PORT
+ * \brief port for the matrix' row pins
+ * \def MATRIX_COL_PORT
+ * \brief port for the matrix' column pins
+ */
 #define MATRIX_ROW_PORT B
 #define MATRIX_COL_PORT C
 
+/**
+ * \def MATRIX_ROW_MASK
+ * \brief mask for the matrix' row pins
+ * \def MATRIX_COL_MASK
+ * \brief mask for the matrix' column pins
+ */
 #define MATRIX_ROW_MASK ((1 << PINB5) | (1 << PINB4) | (1 << PINB3))
 #define MATRIX_COL_MASK ((1 << PINC3) | (1 << PINC2) | (1 << PINC1))
 
+/**
+ * \def MATRIX_ROW_SHIFT
+ * \brief shift width to easily access the matrix' row pins
+ * \def MATRIX_COL_SHIFT
+ * \brief shift width to easily access the matrix' columns pins
+ */
 #define MATRIX_ROW_SHIFT 3
 #define MATRIX_COL_SHIFT 1
 
+/**
+ * \def MATRIX_MAX_ROW
+ * \brief maximum number of row pins
+ * \def MATRIX_MAX_COLUMN
+ * \brief maximum number of column pins
+ */
 #define MATRIX_MAX_ROW    3
 #define MATRIX_MAX_COLUMN 3
 
@@ -201,6 +225,8 @@ void hideMatrix(void);
 
 /**
  * \brief show the pattern defined multiplexing the rows
+ * \param pattern (array index) to be shown
+ * \param select row within pattern
  */
 void showMatrixPattern(uint8_t pattern, uint8_t select);
 
