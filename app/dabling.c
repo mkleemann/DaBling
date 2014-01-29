@@ -54,10 +54,10 @@ uint16_t adcVal = 0xAFFE;
 uint16_t flashTrigger = 1;
 
 //! trigger matrix pattern
-uint8_t matrixPatternTrigger = 0;
+uint16_t matrixTrigger = 0;
 
-//! trigger matrix row to be shown
-uint8_t matrixRowTrigger = 0;
+//! how far to count the trigger until the pattern changes
+#define WAIT_FOR_NEXT_PATTERN 15
 
 //! pattern type for matrix
 typedef struct { //! row pattern
@@ -153,8 +153,13 @@ ISR(TIMER0_OVF_vect)
  */
 ISR(TIMER1_CAPT_vect)
 {
-   ++matrixRowTrigger;
-   showMatrixPattern();
+   // (trigger/wait for pattern) counts up to select the pattern
+   // and its modulo keeps it in range of the array. The row selection
+   // within the pattern is the simple modulo of the trigger with the
+   // number of rows.
+   showMatrixPattern(((matrixTrigger / WAIT_FOR_NEXT_PATTERN) % NUM_OF_MATRIX_PATTERN),
+                      (matrixTrigger % MATRIX_MAX_ROW));
+   ++matrixTrigger;
 }
 
 /**
@@ -279,9 +284,15 @@ void hideMatrix(void)
 
 /**
  * \brief show the pattern defined multiplexing the rows
+ * \param pattern (array index) to be shown
+ * \param select row within pattern
  */
-void showMatrixPattern(void)
+void showMatrixPattern(uint8_t pattern, uint8_t select)
 {
-   showMatrix(matrixPattern[matrixPatternTrigger][matrixRowTrigger].rows,
-              matrixPattern[matrixPatternTrigger][matrixRowTrigger].cols);
+   // remove old pattern first
+   hideMatrix();
+   _delay_us(100);
+   // show new pattern
+   showMatrix(matrixPattern[pattern][select].rows,
+              matrixPattern[pattern][select].cols);
 }

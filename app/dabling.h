@@ -202,7 +202,7 @@ void hideMatrix(void);
 /**
  * \brief show the pattern defined multiplexing the rows
  */
-void showMatrixPattern(void);
+void showMatrixPattern(uint8_t pattern, uint8_t select);
 
 #endif
 
