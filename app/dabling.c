@@ -121,18 +121,6 @@ int __attribute__((OS_main)) main(void)
          show7Segment(adcVal & 0xFF,
                       adcVal >> 8);
       }
-
-      // simple pattern for matrix
-      for(i = 0; i < MATRIX_MAX_ROW; ++i)
-      {
-         for(j = 0; j < MATRIX_MAX_COLUMN; ++j)
-         {
-            showMatrix((1 << i), (1 << j));
-            _delay_ms(200);
-            hideMatrix();
-            _delay_ms(1);
-         }
-      }
    }
 }
 
