@@ -71,9 +71,9 @@ typedef struct { //! row pattern
 
 //! simple pattern for matrix
 matrix_t matrixPattern[NUM_OF_MATRIX_PATTERN][MATRIX_MAX_ROW] =
-   { { { 7, 2 }, { 7, 2 }, { 7, 2 } },    // ***,o*o ***,o*o ***,o*o
+   { { { 1, 2 }, { 2, 2 }, { 4, 2 } },    // oo*,o*o o*o,o*o *oo,o*o
      { { 1, 1 }, { 2, 2 }, { 4, 4 } },    // oo*,oo* o*o,o*o *oo,*oo
-     { { 2, 7 }, { 2, 7 }, { 2, 7 } },    // o*o,*** o*o,*** o*o,***
+     { { 2, 1 }, { 2, 2 }, { 2, 4 } },    // o*o,oo* o*o,o*o o*o,*oo
      { { 1, 4 }, { 2, 2 }, { 4, 1 } } };  // oo*,*oo o*o,o*o *oo,oo*
 
 // === MAIN LOOP =============================================================
