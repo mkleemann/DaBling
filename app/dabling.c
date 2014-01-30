@@ -26,26 +26,27 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
-//! number of pattern in the pattern array
-#define NUM_OF_PATTERN 16
+//! number of pattern in the segmentPattern array
+#define NUM_OF_SEGMENT_PATTERN 16
 
 //! pattern array for the 7 segment display
-uint8_t pattern[NUM_OF_PATTERN] = { SEG_NUM_0,
-                                    SEG_NUM_1,
-                                    SEG_NUM_2,
-                                    SEG_NUM_3,
-                                    SEG_NUM_4,
-                                    SEG_NUM_5,
-                                    SEG_NUM_6,
-                                    SEG_NUM_7,
-                                    SEG_NUM_8,
-                                    SEG_NUM_9,
-                                    SEG_NUM_A,
-                                    SEG_NUM_B,
-                                    SEG_NUM_C,
-                                    SEG_NUM_D,
-                                    SEG_NUM_E,
-                                    SEG_NUM_F };
+uint8_t segmentPattern[NUM_OF_SEGMENT_PATTERN] =
+   { SEG_NUM_0,
+     SEG_NUM_1,
+     SEG_NUM_2,
+     SEG_NUM_3,
+     SEG_NUM_4,
+     SEG_NUM_5,
+     SEG_NUM_6,
+     SEG_NUM_7,
+     SEG_NUM_8,
+     SEG_NUM_9,
+     SEG_NUM_A,
+     SEG_NUM_B,
+     SEG_NUM_C,
+     SEG_NUM_D,
+     SEG_NUM_E,
+     SEG_NUM_F };
 
 //! value of the adc pin
 uint16_t adcVal = 0xAFFE;
@@ -95,22 +96,22 @@ int __attribute__((OS_main)) main(void)
    while(1)
    {
       // count to 10 - two times
-      for(i = 0; i < NUM_OF_PATTERN; ++i)
+      for(i = 0; i < NUM_OF_SEGMENT_PATTERN; ++i)
       {
          // j * wait time in show7Segment() = time to display pattern
          for(j = 0; j < 23; ++j)
          {
-            show7Segment(pattern[i], ~(pattern[i]));
+            show7Segment(segmentPattern[i], ~(segmentPattern[i]));
          }
       }
       _delay_ms(10);
 
-      for(i = 0; i < NUM_OF_PATTERN; ++i)
+      for(i = 0; i < NUM_OF_SEGMENT_PATTERN; ++i)
       {
          // j * wait time in show7Segment() = time to display pattern
          for(j = 0; j < 23; ++j)
          {
-            show7Segment(~(pattern[i]), pattern[i]);
+            show7Segment(~(segmentPattern[i]), segmentPattern[i]);
          }
       }
       _delay_ms(10);
