@@ -58,7 +58,7 @@ uint16_t flashTrigger = 1;
 uint16_t matrixTrigger = 0;
 
 //! how far to count the trigger until the pattern changes
-#define WAIT_FOR_NEXT_PATTERN 15
+#define WAIT_FOR_NEXT_PATTERN_STEP 15
 
 //! pattern type for matrix
 typedef struct { //! row pattern
@@ -68,14 +68,49 @@ typedef struct { //! row pattern
                } matrix_t;
 
 //! max. number of matrix pattern
-#define NUM_OF_MATRIX_PATTERN 4
+#define NUM_OF_MATRIX_PATTERN 3
+
+//! number of single pattern steps in array
+#define NUM_OF_MATRIX_PATTERN_STEPS 24
+
+//! define steps per different pattern corresponding with matrixPattern array
+uint8_t stepsPerPattern[NUM_OF_MATRIX_PATTERN] = { 4, 12, 8 };
+
+//! define offset per different pattern corresponding with matrixPattern array
+uint8_t offsetPerPattern[NUM_OF_MATRIX_PATTERN] = { 0, 4, 16 };
 
 //! simple pattern for matrix
-matrix_t matrixPattern[NUM_OF_MATRIX_PATTERN][MATRIX_MAX_ROW] =
-   { { { 1, 2 }, { 2, 2 }, { 4, 2 } },    // oo*,o*o o*o,o*o *oo,o*o
-     { { 1, 1 }, { 2, 2 }, { 4, 4 } },    // oo*,oo* o*o,o*o *oo,*oo
-     { { 2, 1 }, { 2, 2 }, { 2, 4 } },    // o*o,oo* o*o,o*o o*o,*oo
-     { { 1, 4 }, { 2, 2 }, { 4, 1 } } };  // oo*,*oo o*o,o*o *oo,oo*
+matrix_t matrixPattern[NUM_OF_MATRIX_PATTERN_STEPS][MATRIX_MAX_ROW] =
+   { { { 1, 2 }, { 2, 2 }, { 4, 2 } },    // mill
+     { { 1, 1 }, { 2, 2 }, { 4, 4 } },
+     { { 2, 1 }, { 2, 2 }, { 2, 4 } },
+     { { 1, 4 }, { 2, 2 }, { 4, 1 } },
+     //-------------------------------    next pattern
+     { { 1, 1 }, { 0, 0 }, { 0, 0 } },    // from upper corner (l) to lower corner (r)
+     { { 1, 2 }, { 2, 2 }, { 2, 1 } },
+     { { 1, 4 }, { 2, 4 }, { 4, 7 } },
+     { { 2, 4 }, { 4, 2 }, { 4, 4 } },
+     { { 0, 0 }, { 0, 0 }, { 4, 4 } },
+     { { 0, 0 }, { 0, 0 }, { 0, 0 } },
+     { { 1, 4 }, { 0, 0 }, { 0, 0 } },    // from upper corner (r) to lower corner (l)
+     { { 1, 2 }, { 2, 2 }, { 2, 4 } },
+     { { 1, 1 }, { 2, 1 }, { 4, 7 } },
+     { { 2, 1 }, { 4, 1 }, { 4, 2 } },
+     { { 0, 0 }, { 0, 0 }, { 4, 1 } },
+     { { 0, 0 }, { 0, 0 }, { 0, 0 } },
+     //-------------------------------    next pattern
+     { { 1, 7 }, { 0, 0 }, { 0, 0 } },    // wandering bar (rows)
+     { { 2, 7 }, { 0, 0 }, { 0, 0 } },
+     { { 4, 7 }, { 0, 0 }, { 0, 0 } },
+     { { 0, 0 }, { 0, 0 }, { 0, 0 } },
+     { { 1, 1 }, { 2, 1 }, { 4, 1 } },    // wandering bar (cols)
+     { { 1, 2 }, { 2, 2 }, { 4, 2 } },
+     { { 1, 4 }, { 2, 4 }, { 4, 4 } },
+     { { 0, 0 }, { 0, 0 }, { 0, 0 } }
+   };
+
+//! sets pattern active to show
+uint8_t matrixPatternInProgress = 0;
 
 // === MAIN LOOP =============================================================
 
@@ -122,6 +157,13 @@ int __attribute__((OS_main)) main(void)
          show7Segment(adcVal & 0xFF,
                       adcVal >> 8);
       }
+
+      // change to next matrix pattern
+      ++matrixPatternInProgress;
+      if(matrixPatternInProgress == NUM_OF_MATRIX_PATTERN)
+      {
+         matrixPatternInProgress = 0;
+      }
    }
 }
 
@@ -146,8 +188,11 @@ ISR(TIMER1_CAPT_vect)
    // and its modulo keeps it in range of the array. The row selection
    // within the pattern is the simple modulo of the trigger with the
    // number of rows.
-   showMatrixPattern(((matrixTrigger / WAIT_FOR_NEXT_PATTERN) % NUM_OF_MATRIX_PATTERN),
-                      (matrixTrigger % MATRIX_MAX_ROW));
+   uint8_t patternStepActive =
+      ((matrixTrigger / WAIT_FOR_NEXT_PATTERN_STEP) % stepsPerPattern[matrixPatternInProgress]) +
+      offsetPerPattern[matrixPatternInProgress];
+
+   showMatrixPattern(patternStepActive, (matrixTrigger % MATRIX_MAX_ROW));
    ++matrixTrigger;
 }
 
