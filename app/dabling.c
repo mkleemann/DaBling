@@ -58,7 +58,7 @@ uint16_t flashTrigger = 1;
 uint16_t matrixTrigger = 0;
 
 //! how far to count the trigger until the pattern changes
-#define WAIT_FOR_NEXT_PATTERN_STEP 15
+#define WAIT_FOR_NEXT_PATTERN_STEP 45
 
 //! pattern type for matrix
 typedef struct { //! row pattern
@@ -92,11 +92,11 @@ matrix_t matrixPattern[NUM_OF_MATRIX_PATTERN_STEPS][MATRIX_MAX_ROW] =
      { { 2, 4 }, { 4, 2 }, { 4, 4 } },
      { { 0, 0 }, { 0, 0 }, { 4, 4 } },
      { { 0, 0 }, { 0, 0 }, { 0, 0 } },
-     { { 1, 4 }, { 0, 0 }, { 0, 0 } },    // from upper corner (r) to lower corner (l)
+     { { 0, 0 }, { 1, 4 }, { 0, 0 } },    // from upper corner (r) to lower corner (l)
      { { 1, 2 }, { 2, 2 }, { 2, 4 } },
      { { 1, 1 }, { 2, 1 }, { 4, 7 } },
      { { 2, 1 }, { 4, 1 }, { 4, 2 } },
-     { { 0, 0 }, { 0, 0 }, { 4, 1 } },
+     { { 0, 0 }, { 4, 1 }, { 0, 0 } },
      { { 0, 0 }, { 0, 0 }, { 0, 0 } },
      //-------------------------------    next pattern
      { { 1, 7 }, { 0, 0 }, { 0, 0 } },    // wandering bar (rows)

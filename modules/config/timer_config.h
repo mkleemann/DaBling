@@ -77,7 +77,7 @@
  *
  * The value given calculates to approx. 10ms (1MHz@1024 prescale value).
  */
-#define TIMER1_COMPARE_VALUE  10
+#define TIMER1_COMPARE_VALUE  5
 
 /**
  * \def TIMER2_PRESCALER
