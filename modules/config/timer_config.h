@@ -75,7 +75,7 @@
 /**
  * \brief Timer 1 Output Compare Value
  *
- * The value given calculates to approx. 10ms (1MHz@1024 prescale value).
+ * The value given calculates to approx. 5ms (1MHz@1024 prescale value).
  */
 #define TIMER1_COMPARE_VALUE  5
 
