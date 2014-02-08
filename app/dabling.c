@@ -68,16 +68,16 @@ typedef struct { //! row pattern
                } matrix_t;
 
 //! max. number of matrix pattern
-#define NUM_OF_MATRIX_PATTERN 3
+#define NUM_OF_MATRIX_PATTERN 4
 
 //! number of single pattern steps in array
-#define NUM_OF_MATRIX_PATTERN_STEPS 24
+#define NUM_OF_MATRIX_PATTERN_STEPS 40
 
 //! define steps per different pattern corresponding with matrixPattern array
-uint8_t stepsPerPattern[NUM_OF_MATRIX_PATTERN] = { 4, 12, 8 };
+uint8_t stepsPerPattern[NUM_OF_MATRIX_PATTERN] = { 4, 12, 8, 16 };
 
 //! define offset per different pattern corresponding with matrixPattern array
-uint8_t offsetPerPattern[NUM_OF_MATRIX_PATTERN] = { 0, 4, 16 };
+uint8_t offsetPerPattern[NUM_OF_MATRIX_PATTERN] = { 0, 4, 16, 24 };
 
 //! simple pattern for matrix
 matrix_t matrixPattern[NUM_OF_MATRIX_PATTERN_STEPS][MATRIX_MAX_ROW] =
@@ -106,7 +106,24 @@ matrix_t matrixPattern[NUM_OF_MATRIX_PATTERN_STEPS][MATRIX_MAX_ROW] =
      { { 1, 1 }, { 2, 1 }, { 4, 1 } },    // wandering bar (cols)
      { { 1, 2 }, { 2, 2 }, { 4, 2 } },
      { { 1, 4 }, { 2, 4 }, { 4, 4 } },
-     { { 0, 0 }, { 0, 0 }, { 0, 0 } }
+     { { 0, 0 }, { 0, 0 }, { 0, 0 } },
+     //-------------------------------    next pattern
+     { { 1, 2 }, { 0, 0 }, { 0, 0 } },    // wandering point at border
+     { { 1, 4 }, { 0, 0 }, { 0, 0 } },
+     { { 2, 4 }, { 0, 0 }, { 0, 0 } },
+     { { 4, 4 }, { 0, 0 }, { 0, 0 } },
+     { { 4, 2 }, { 0, 0 }, { 0, 0 } },
+     { { 4, 1 }, { 0, 0 }, { 0, 0 } },
+     { { 2, 1 }, { 0, 0 }, { 0, 0 } },
+     { { 1, 1 }, { 0, 0 }, { 0, 0 } },
+     { { 1, 2 }, { 0, 0 }, { 0, 0 } },    // wandering point as 8
+     { { 1, 4 }, { 0, 0 }, { 0, 0 } },
+     { { 2, 4 }, { 0, 0 }, { 0, 0 } },
+     { { 2, 2 }, { 0, 0 }, { 0, 0 } },
+     { { 2, 1 }, { 0, 0 }, { 0, 0 } },
+     { { 4, 1 }, { 0, 0 }, { 0, 0 } },
+     { { 4, 2 }, { 0, 0 }, { 0, 0 } },
+     { { 2, 2 }, { 0, 0 }, { 0, 0 } }
    };
 
 //! sets pattern active to show
@@ -240,7 +257,7 @@ void initHardware(void)
 
    // approx. 262ms @ 1MHz
    initTimer0(/* TimerOverflow */);
-   // approx. 10ms @ 1MHz
+   // approx. 5ms @ 1MHz
    initTimer1(TimerCompare);
    // approx. 25ms @ 1MHz
    initTimer2(TimerCompare);
