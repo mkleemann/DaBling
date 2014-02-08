@@ -1,0 +1,40 @@
+/** 
+ * \mainpage Da Bling! - some "bling" effects with LEDs 
+ * 
+ * \section Copyright
+ * - - -
+ * <b>"THE ANY BEVERAGE-WARE LICENSE"</b> (Revision 42 - based on beer-ware license):
+ * 
+ * <dev@layer128.net> wrote this file. As long as you retain this notice you
+ * can do whatever you want with this stuff. If we meet some day, and you think
+ * this stuff is worth it, you can buy me a be(ve)er(age) in return. (I don't
+ * like beer much.)
+ * 
+ * Matthias Kleemann
+ * - - -
+ * 
+ * \section dabling_what What the hell...?
+ * The project sprang to life after an idea to have "a satellite for children's
+ * carnival as accessory". The satellite was easily done, but lacked some kind
+ * of "bling". So the "bling" it should get, which leaves us wondering to what
+ * extent engineer dads go, when it comes to impressing their children. :-)
+ * 
+ * \section dabling_types What types of "bling" do we get?
+ * \subsection dabling_7segment Dual 7 Segment LED Display
+ * The dual 7 segment LED display is multiplexed between both sides by using the
+ * common cathode of each display as select pin. Since it uses a fast switch between
+ * both displays, the power consumption is less than it would be on a static display.
+ * 
+ * The display shows a simple count of 0 to F on each side and the inverted pattern on
+ * the other one. After that a simple random pattern triggered by the ADC port 0
+ * is shown on the display for a while. This repeats.
+ *
+ * \subsection dabling_matrix 3x3 LED Matrix
+ * the 3x3 LED matrix is used to present some simple patterns, like the well-known
+ * "I'm still doing something" mill. The patterns change with each complete cycle of
+ * the 7 segment patterns. 
+ * 
+ * \subsection dabling_blinking Flashing LEDs
+ * What would a satellite be, if it wouldn't have some flashing LEDs? Preferably in
+ * blue color.
+ */
