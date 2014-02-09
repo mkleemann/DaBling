@@ -18,6 +18,10 @@
  * carnival as accessory". The satellite was easily done, but lacked some kind
  * of "bling". So the "bling" it should get, which leaves us wondering to what
  * extent engineer dads go, when it comes to impressing their children. :-)
+ *
+ * \image html "doc/satellite-outside.jpg" "the satellite"
+ * \image html "doc/satellite-inside.jpg" "inside Da Bling!"
+ * \image html "doc/schematics/dabling-complete.png" "schematics of Da Bling!"
  * 
  * \section dabling_types What types of "bling" do we get?
  * \subsection dabling_7segment Dual 7 Segment LED Display
@@ -28,12 +32,16 @@
  * The display shows a simple count of 0 to F on each side and the inverted pattern on
  * the other one. After that a simple random pattern triggered by the ADC port 0
  * is shown on the display for a while. This repeats.
+ * 
+ * \image html "doc/schematics/dabling-7-segment.png" "schematics of 7 segment block"
  *
  * \subsection dabling_matrix 3x3 LED Matrix
  * the 3x3 LED matrix is used to present some simple patterns, like the well-known
  * "I'm still doing something" mill. The patterns change with each complete cycle of
  * the 7 segment patterns. 
  * 
+ * \image html "doc/schematics/dabling-3x3-matrix.png" "schematics of 3x3 matrix block"
+ *
  * \subsection dabling_blinking Flashing LEDs
  * What would a satellite be, if it wouldn't have some flashing LEDs? Preferably in
  * blue color.
