@@ -20,10 +20,29 @@
  * extent engineer dads go, when it comes to impressing their children. :-)
  *
  * \image html "doc/satellite-outside.jpg" "the satellite"
+ *
+ * The satellite is no more than a dish from an old lamp mounted to an old
+ * lunch box. The screw holding the dish to the lunch box also serves as
+ * "antenna".
+ *
  * \image html "doc/satellite-inside.jpg" "inside Da Bling!"
+ *
+ * Because carnival comes and goes, the modules containing the "bling" hardware
+ * is built up to be re-used in some other projects/experiments later. That's
+ * why the Atmega8 used, got its ISP connector and the resistors used for the
+ * 7 segment display are mounted removeable. The matrix too, got its own PCBish
+ * mounting, but the signal wires are soldered on. The same goes for the flashing
+ * LEDs.
+ *
  * \image html "doc/schematics/dabling-complete.png" "schematics of Da Bling!"
+ *
+ * No project without the schematics. Years later one should not wonder and
+ * need to reverse engineer such important stuff. I used some accumulators with
+ * the overall voltage of 4.8V. Therefore no voltage controller is used here.
  * 
  * \section dabling_types What types of "bling" do we get?
+ * There sure is a hint in the section above. :-)
+ *
  * \subsection dabling_7segment Dual 7 Segment LED Display
  * The dual 7 segment LED display is multiplexed between both sides by using the
  * common cathode of each display as select pin. Since it uses a fast switch between
@@ -35,14 +54,29 @@
  * 
  * \image html "doc/schematics/dabling-7-segment.png" "schematics of 7 segment block"
  *
+ * I used an old GDR made VQE23 dual 7 segment display, because it was lying around.
+ * Newer ones should also work. Using common anodes need some adaptions to the
+ * multiplexing, of course.
+ *
+ * Why, you ask? Most of the AVR tutorials show the usage of such a display. I
+ * never got around to do it, so I took the opportunity. :-)
+ *
  * \subsection dabling_matrix 3x3 LED Matrix
- * the 3x3 LED matrix is used to present some simple patterns, like the well-known
+ * The 3x3 LED matrix is used to present some simple patterns, like the well-known
  * "I'm still doing something" mill. The patterns change with each complete cycle of
  * the 7 segment patterns. 
  * 
  * \image html "doc/schematics/dabling-3x3-matrix.png" "schematics of 3x3 matrix block"
  *
+ * The matrix is also some experiment to look into the issues arising from such
+ * task. In later versions, one could use the eeprom to store the patterns. With
+ * a more complex matrix, e.g. 5x5, the multiplexing would no longer be sufficient
+ * w/o flickering of the LEDs. Some latches would do the trick here, but increase
+ * the power consumption.
+ *
  * \subsection dabling_blinking Flashing LEDs
  * What would a satellite be, if it wouldn't have some flashing LEDs? Preferably in
- * blue color.
+ * blue color. The flashing can be adapted in the software by using the 16bit of the
+ * control pattern. Ones are on and zeroes off. Incredible, isn't it? Each bit represents
+ * 25ms in the sequence. So the pattern 0001000100010001 would flash every 75ms for 25ms.
  */
