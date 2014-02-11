@@ -156,6 +156,7 @@ int __attribute__((OS_main)) main(void)
             show7Segment(segmentPattern[i], ~(segmentPattern[i]));
          }
       }
+      nextMatrixPattern();
       _delay_ms(10);
 
       for(i = 0; i < NUM_OF_SEGMENT_PATTERN; ++i)
@@ -166,21 +167,16 @@ int __attribute__((OS_main)) main(void)
             show7Segment(~(segmentPattern[i]), segmentPattern[i]);
          }
       }
+      nextMatrixPattern();
       _delay_ms(10);
 
       // random adc pattern
-      for(i = 0; i < 2500; ++i)
+      for(i = 0; i < 2000; ++i)
       {
          show7Segment(adcVal & 0xFF,
                       adcVal >> 8);
       }
-
-      // change to next matrix pattern
-      ++matrixPatternInProgress;
-      if(matrixPatternInProgress == NUM_OF_MATRIX_PATTERN)
-      {
-         matrixPatternInProgress = 0;
-      }
+      nextMatrixPattern();
    }
 }
 
@@ -347,3 +343,17 @@ void showMatrixPattern(uint8_t pattern, uint8_t select)
    showMatrix(matrixPattern[pattern][select].rows,
               matrixPattern[pattern][select].cols);
 }
+
+/**
+ * \brief change matrix pattern to next
+ */
+void nextMatrixPattern(void)
+{
+      // change to next matrix pattern
+      ++matrixPatternInProgress;
+      if(matrixPatternInProgress == NUM_OF_MATRIX_PATTERN)
+      {
+         matrixPatternInProgress = 0;
+      }
+}
+

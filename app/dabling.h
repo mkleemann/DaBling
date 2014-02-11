@@ -230,5 +230,10 @@ void hideMatrix(void);
  */
 void showMatrixPattern(uint8_t pattern, uint8_t select);
 
+/**
+ * \brief change matrix pattern to next
+ */
+void nextMatrixPattern(void);
+
 #endif
 
