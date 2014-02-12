@@ -235,5 +235,29 @@ void showMatrixPattern(uint8_t pattern, uint8_t select);
  */
 void nextMatrixPattern(void);
 
+/**
+ * \brief set AVR to sleep
+ *
+ * In this special case, only the idle mode is possible. We don't use an external
+ * clock, so we need the internal clock source for timer 2 wakeup call. External
+ * interrupts are also blocked.
+ *
+ * \code
+ * SM2 SM1 SM0 Sleep Mode
+ *   0   0   0 Idle
+ *   0   0   1 ADC Noise Reduction
+ *   0   1   0 Power-down
+ *   0   1   1 Power-save
+ *   1   1   0 Standby
+ * \endcode
+ *
+ * AVR enters sleep mode and also wakes up in this state, so some intial
+ * steps to set wakeup interrupt need to be done here.
+ *
+ * The three \c _NOP(); instructions are a safety, since older AVRs may
+ * skip the next couple of instructions after sleep mode.
+ */
+void sleepNow(void);
+
 #endif
 

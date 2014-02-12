@@ -25,6 +25,8 @@
 
 #include <util/delay.h>
 #include <avr/interrupt.h>
+#include <avr/sleep.h>
+#include <avr/cpufunc.h>
 
 //! number of pattern in the segmentPattern array
 #define NUM_OF_SEGMENT_PATTERN 16
@@ -129,6 +131,12 @@ matrix_t matrixPattern[NUM_OF_MATRIX_PATTERN_STEPS][MATRIX_MAX_ROW] =
 //! sets pattern active to show
 uint8_t matrixPatternInProgress = 0;
 
+//! wait cycles (in main loop) for taking the AVR to sleep
+#define WAIT_CYCLES_FOR_SLEEP 4
+
+//! time to be in sleep mode: approximately in ms
+#define SLEEPING_TIME 30000
+
 // === MAIN LOOP =============================================================
 
 /**
@@ -142,6 +150,7 @@ int __attribute__((OS_main)) main(void)
 {
    uint16_t i = 0;
    uint16_t j = 0;
+   int8_t wait4Sleep = 0;
 
    initHardware();
 
@@ -177,6 +186,14 @@ int __attribute__((OS_main)) main(void)
                       adcVal >> 8);
       }
       nextMatrixPattern();
+
+      // sleep now..or wait another cycle
+      ++wait4Sleep;
+      if(WAIT_CYCLES_FOR_SLEEP == wait4Sleep)
+      {
+         sleepNow();
+         wait4Sleep = 0;
+      }
    }
 }
 
@@ -357,3 +374,55 @@ void nextMatrixPattern(void)
       }
 }
 
+/**
+ * \brief set AVR to sleep
+ *
+ * In this special case, only the idle mode is possible. We don't use an external
+ * clock, so we need the internal clock source for timer 2 wakeup call. External
+ * interrupts are also blocked.
+ *
+ * \code
+ * SM2 SM1 SM0 Sleep Mode
+ *   0   0   0 Idle
+ *   0   0   1 ADC Noise Reduction
+ *   0   1   0 Power-down
+ *   0   1   1 Power-save
+ *   1   1   0 Standby
+ * \endcode
+ *
+ * AVR enters sleep mode and also wakes up in this state, so some intial
+ * steps to set wakeup interrupt need to be done here.
+ *
+ * The three \c _NOP(); instructions are a safety, since older AVRs may
+ * skip the next couple of instructions after sleep mode.
+ */
+void sleepNow(void)
+{
+   cli();
+
+   stopTimer0();
+   stopTimer2();
+   adc_disable();
+   led_all_off();
+
+   // set wakeup call
+   setTimer1Count(SLEEPING_TIME);
+
+   // let's sleep...
+   set_sleep_mode(SLEEP_MODE_IDLE);
+   // sleep_mode() has a possible race condition in it, so splitting it
+   sleep_enable();
+   sei();
+   sleep_cpu();
+   sleep_disable();
+
+   // just in case...
+   _NOP();
+   _NOP();
+   _NOP();
+
+   // ...and restart
+   adc_enable();
+   startTimer0();
+   startTimer2();
+}
