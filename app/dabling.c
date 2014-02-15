@@ -404,6 +404,7 @@ void sleepNow(void)
    stopTimer2();
    adc_disable();
    led_all_off();
+   hideMatrix();
 
    // set wakeup call
    setTimer1Count(SLEEPING_TIME);
